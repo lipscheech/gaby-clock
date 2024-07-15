@@ -1,0 +1,11 @@
+.container_config {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: black;
+
+	ion-button {
+		--background: black;
+		--color: white;
+	}
+}

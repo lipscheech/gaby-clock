@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">
+				<ion-icon slot="icon-only" ios="close" md="close"></ion-icon>
+			</ion-button>
+    </ion-buttons>
+    <ion-title class="text-center">Timer config</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">
+				<ion-icon slot="icon-only" ios="checkmark" md="checkmark"></ion-icon>
+			</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+		<ion-item>
+			<ion-select label="Timer type" interface="action-sheet" label-placement="Timer type">
+				<ion-select-option value="hms">Horas, minutos e segundos</ion-select-option>
+				<ion-select-option value="hm">Horas e minutos</ion-select-option>
+				<ion-select-option value="ms">Minutos e segundos</ion-select-option>
+				<ion-select-option value="m">Apenas minutos</ion-select-option>
+			</ion-select>
+		</ion-item>
+	</ion-list>
+	<div class="d-flex col-12 justify-content-center align-items-center mt-2">
+		<ion-datetime presentation="time" [hourValues]="0" (ionChange)="confirmTime($event)">
+		</ion-datetime>
+	</div>
+</ion-content>

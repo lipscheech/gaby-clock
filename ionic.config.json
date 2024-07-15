@@ -1,0 +1,7 @@
+{
+  "name": "relogio-gaby",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

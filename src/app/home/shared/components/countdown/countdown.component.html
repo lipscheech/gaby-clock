@@ -1,0 +1,19 @@
+<div class="container_app">
+	<div class="container_card text-center me-5" [class.active]="showAnimation">
+		<span> {{minutesString[0]}} </span>
+	</div>
+	<div class="flip-card" [class.flipped]="showAnimation">
+		<div class="flip-card-inner">
+			<div class="flip-card-front">
+				<div class="container_card text-center">
+					<span> {{minutesString[1]}} </span>
+				</div>
+			</div>
+			<div class="flip-card-back">
+				<div class="container_card text-center">
+					<span> {{minutesStringBackup[1]}} </span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

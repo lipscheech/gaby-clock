@@ -1,0 +1,62 @@
+.container_app {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 90vh;
+	background: black;
+	position: relative;
+
+	.container_card {
+		height: 80vh;
+		width: 100%;
+		max-width: 500px;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 0 10px rgba(241, 241, 241, 0.178);
+		color: white;
+		background: #1a1a1a;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		span {
+			font-size: 400px;
+			font-weight: bold;
+		}
+	}
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 500px;
+  height: 80vh;
+  perspective: 1000px; /* Cria a perspectiva 3D */
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 1s;
+  transform-style: preserve-3d; /* Mantém o contexto 3D dos filhos */
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateX(180deg); /* Gira o cartão quando flipped é true */
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Previne que o verso seja visto */
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  background-color: black;
+  color: white;
+  transform: rotateX(180deg); /* Inicia o verso escondido */
+}
+
