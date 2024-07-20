@@ -27,6 +27,7 @@ export class HomePage implements OnInit {
 	ngOnInit(): void {
 		this.targetDate = new Date();
 		this.targetDate.setHours(21, 51, 59, 999);
+		this,this.timeService.setTime({ duration: 5 });
 	}
 
 	async openModal() {

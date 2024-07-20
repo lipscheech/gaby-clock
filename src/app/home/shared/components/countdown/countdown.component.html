@@ -1,19 +1,29 @@
-<div class="container_app">
-	<div class="container_card text-center me-5" [class.active]="showAnimation">
-		<span> {{minutesString[0]}} </span>
-	</div>
-	<div class="flip-card" [class.flipped]="showAnimation">
-		<div class="flip-card-inner">
-			<div class="flip-card-front">
-				<div class="container_card text-center">
-					<span> {{minutesString[1]}} </span>
+<div class="countdown">
+	<ng-container *ngFor="let timeLoop of timeObject">
+		<div class="time-section" id="{{timeLoop.name}}" #{{timeLoop.name}}>
+			<div class="time-group">
+				<div class="time-segment" #timeSegment>
+					<div class="segment-display" #segmentDisplay>
+						<div class="segment-display__top" #segmentDisplayTop> {{timeLoop.time}} </div>
+						<div class="segment-display__bottom" #segmentDisplayBottom> {{timeLoop.time}}</div>
+						<div class="segment-overlay" #segmentOverlay>
+							<div class="segment-overlay__top" #segmentOverlayTop> {{timeLoop.time}} </div>
+							<div class="segment-overlay__bottom" #segmentOverlayBottom> {{timeLoop.time}} </div>
+						</div>
+					</div>
+				</div>
+				<div class="time-segment">
+					<div class="segment-display">
+						<div class="segment-display__top" #segmentDisplayTop> {{timeLoop.time}} </div>
+						<div class="segment-display__bottom" #segmentDisplayBottom> {{timeLoop.time}} </div>
+						<div class="segment-overlay" #segmentOverlay>
+							<div class="segment-overlay__top" #segmentOverlayTop> {{timeLoop.time}} </div>
+							<div class="segment-overlay__bottom" #segmentOverlayBottom> {{timeLoop.time}} </div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="flip-card-back">
-				<div class="container_card text-center">
-					<span> {{minutesStringBackup[1]}} </span>
-				</div>
-			</div>
+			<p>{{ timeLoop.name }}</p>
 		</div>
-	</div>
+	</ng-container>
 </div>

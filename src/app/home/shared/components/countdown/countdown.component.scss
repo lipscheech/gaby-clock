@@ -1,62 +1,117 @@
-.container_app {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 90vh;
-	background: black;
-	position: relative;
-
-	.container_card {
-		height: 80vh;
-		width: 100%;
-		max-width: 500px;
-		padding: 20px;
-		border-radius: 10px;
-		box-shadow: 0 0 10px rgba(241, 241, 241, 0.178);
-		color: white;
-		background: #1a1a1a;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		span {
-			font-size: 400px;
-			font-weight: bold;
-		}
-	}
+* {
+  box-sizing: border-box;
 }
 
-.flip-card {
-  background-color: transparent;
-  width: 500px;
-  height: 80vh;
-  perspective: 1000px; /* Cria a perspectiva 3D */
+
+.countdown {
+  margin: 100px auto;
+  width: 50%;
+  display: flex;
+  gap: 30px;
+  font-family: sans-serif;
 }
 
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.time-section {
   text-align: center;
-  transition: transform 1s;
-  transform-style: preserve-3d; /* Mantém o contexto 3D dos filhos */
+  font-size: 30px;
 }
 
-.flip-card.flipped .flip-card-inner {
-  transform: rotateX(180deg); /* Gira o cartão quando flipped é true */
+.time-group {
+  display: flex;
+  gap: 10px;
 }
 
-.flip-card-front, .flip-card-back {
-  position: absolute;
-  width: 100%;
+.time-segment {
+  display: block;
+  font-size: 100px;
+  font-weight: 900;
+  width: 100px;
+}
+
+.segment-display {
+  position: relative;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* Previne que o verso seja visto */
-  backface-visibility: hidden;
 }
 
-.flip-card-back {
-  background-color: black;
-  color: white;
-  transform: rotateX(180deg); /* Inicia o verso escondido */
+.segment-display__top,
+.segment-display__bottom {
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  height: 50%;
+  position: relative;
 }
 
+.segment-display__top {
+  line-height: 1.5;
+  color: #eee;
+  background-color: #1a1a1a;
+}
+
+.segment-display__bottom {
+  line-height: 0;
+  color: #fff;
+  background-color: #333;
+}
+
+.segment-overlay {
+  position: absolute;
+  top: 0;
+  perspective: 400px;
+  height: 100%;
+  width: 100px;
+}
+
+.segment-overlay__top,
+.segment-overlay__bottom {
+  position: absolute;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  height: 50%;
+}
+
+.segment-overlay__top {
+  top: 0;
+  line-height: 1.5;
+  color: #fff;
+  background-color: #1a1a1a;
+  transform-origin: bottom;
+}
+
+.segment-overlay__bottom {
+  bottom: 0;
+  line-height: 0;
+  color: #eee;
+  background-color: #333;
+  border-top: 2px solid black;
+  transform-origin: top;
+}
+
+.segment-overlay.flip .segment-overlay__top {
+  animation: flip-top 0.8s linear;
+}
+
+.segment-overlay.flip .segment-overlay__bottom {
+  animation: flip-bottom 0.8s linear;
+}
+
+@keyframes flip-top {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50%,
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes flip-bottom {
+  0%,
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
