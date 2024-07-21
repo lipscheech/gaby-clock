@@ -4,6 +4,8 @@ import { ModalController } from '@ionic/angular';
 import { ModalConfigComponent } from './shared/modals/modal-config/modal-config.component';
 import { Time } from './shared/interfaces/time';
 import { TimeService } from './shared/services/time.service';
+import { TimerObject } from './shared/interfaces/timer-object';
+import { TipoTime } from './shared/enums/tipo-time.enum';
 
 @Component({
 	selector: 'app-home',
@@ -16,6 +18,13 @@ export class HomePage implements OnInit {
 	time: Time = { duration: 50 };
 	faGear = faGear;
 	message = 'This modal example uses the modalController to present and dismiss modals.';
+
+	timeObject: TimerObject[] = [
+		{
+			name: TipoTime.MINUTES,
+			time: 0,
+		}
+	]
 
 
 	constructor(

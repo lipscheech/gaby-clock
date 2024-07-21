@@ -22,27 +22,9 @@ import { TipoTime } from '../../enums/tipo-time.enum';
 	templateUrl: './countdown.component.html',
 	styleUrls: ['./countdown.component.scss'],
 })
-export class CountdownComponent implements OnInit, OnDestroy, AfterViewInit {
-	@Input() targetDate!: Date; // Data alvo para a contagem regressiva
-
-	@ViewChildren('hours') viewChildrenHours!: ElementRef;
-	@ViewChildren('minutes') viewChildrenMinutes!: ElementRef;
-	@ViewChildren('seconds') viewChildrenSeconds!: ElementRef;
-	@ViewChildren('timeSegment') timeSegments!: ElementRef;
-
-	time: Time = { duration: 0 };
-	timeLeft!: number;
-	hours: number = 0;
-	minutes: number = 0;
-	minutesString: string[] = ['0', '0'];
-	minutesStringBackup: string[] = ['0', '0'];
-	subscription: Subscription = new Subscription();
-	showAnimation = false;
-	animationTimeout: any;
-	timeBackup: number = 0;
-	digits: any[] = [];
-	previousDigits: any[] = [];
-	timeObject: TimerObject[] = [
+export class CountdownComponent implements OnInit, OnDestroy {
+	@Input() targetDate!: Date; //* Data alvo para a contagem regressiva
+	@Input() timeObject: TimerObject[] = [
 		{
 			name: TipoTime.HOURS,
 			time: 0,
@@ -66,6 +48,14 @@ export class CountdownComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	];
 
+	time: Time = { duration: 0 };
+	timeLeft!: number;
+	hour: number = 0;
+	minute: number = 0;
+	second: number = 0;
+
+	subscription: Subscription = new Subscription();
+
 	constructor(
 		private cdref: ChangeDetectorRef,
 		private timeService: TimeService
@@ -78,16 +68,28 @@ export class CountdownComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.subscription = interval(1000)
 			.pipe(
 				map(() => {
+
+					if(!this.timeObject.length) {
+						this.subscription.unsubscribe();
+						return;
+					}
+
 					const timeDifference = this.timeLeft - Date.now();
 					const totalSeconds = Math.max(0, Math.floor(timeDifference / 1000));
 
-					this.timeObject[0].time = Math.floor(totalSeconds / 3600);
-					this.timeObject[1].time = Math.floor((totalSeconds % 3600) / 60);
-					this.timeObject[2].time = totalSeconds % 60;
+					this.timeObject.forEach((t) => {
+						if(t.name == TipoTime.HOURS) {
+							this.hour = Math.floor(totalSeconds / 3600);
+						} else if (t.name == TipoTime.MINUTES) {
+							this.minute = Math.floor((totalSeconds % 3600) / 60);
+						} else if (t.name == TipoTime.SECONDS) {
+							this.second = totalSeconds % 60;
+						}
+					})
 
-					this.updateTime(TipoTime.HOURS, this.timeObject[0].time);
-					this.updateTime(TipoTime.MINUTES, this.timeObject[1].time);
-					this.updateTime(TipoTime.SECONDS, this.timeObject[2].time);
+					this.updateTime(TipoTime.HOURS, this.hour);
+					this.updateTime(TipoTime.MINUTES, this.minute);
+					this.updateTime(TipoTime.SECONDS, this.minute);
 				})
 			)
 			.subscribe(); // Não precisa mais armazenar o timeLeft
@@ -107,16 +109,45 @@ export class CountdownComponent implements OnInit, OnDestroy, AfterViewInit {
 	updateTimeSegment(segmentElement: any, timeValue: number) {
 		const segmentElements = this.getTimeSegmentElements(segmentElement);
 
-		if ( parseInt( segmentElements.segmentDisplayTop.textContent, 10) === timeValue) {
+		if (!segmentElements) {
 			return;
 		}
 
-		segmentElements.segmentOverlay.classList.add('flip');
+		if (parseInt(segmentElements?.segmentDisplayTop?.textContent, 10) === timeValue) {
+			return;
+		}
+
+		segmentElements?.segmentOverlay?.classList?.add('flip');
+
+		this.updateSegmentValues(segmentElements?.segmentDisplayTop, segmentElements?.segmentOverlayBottom, timeValue);
+
+		const finishAnimation = () => {
+			segmentElements?.segmentOverlay?.classList?.remove('flip');
+			this.updateSegmentValues(
+				segmentElements?.segmentDisplayBottom,
+				segmentElements?.segmentOverlayTop,
+				timeValue
+			);
+
+			removeEventListener(
+				'animationend',
+				finishAnimation
+			);
+		}
+
+		segmentElements.segmentOverlay.addEventListener(
+			'animationend',
+			finishAnimation
+		);
 
 	}
 
 
 	getTimeSegmentElements(segmentElement: any) {
+		if(!segmentElement) {
+			return null;
+		}
+
 		const segmentDisplay = segmentElement.querySelector(
 			'.segment-display'
 		);
@@ -154,20 +185,12 @@ export class CountdownComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 	}
 
-	resetAnimation() {
-		clearTimeout(this.animationTimeout); // Limpa o timeout anterior (se houver)
-
-		this.animationTimeout = setTimeout(() => {
-			this.showAnimation = false; // Desativa a animação
-		}, 500); // Atraso de 1 segundo para reiniciar a animação (ajuste conforme necessário)
+	updateSegmentValues(displayElement: any, overlayElement: any, value: any) {
+		displayElement.textContent = value;
+		overlayElement.textContent = value;
 	}
 
 	ngOnDestroy() {
 		this.subscription.unsubscribe(); // Cancela a inscrição para evitar vazamentos de memória
-	}
-
-	ngAfterViewInit() {
-		console.log(this.viewChildrenHours);
-
 	}
 }
