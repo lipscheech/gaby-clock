@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
 
 	timeObject: TimerObject[] = [
 		{
-			name: TipoTime.MINUTES,
+			name: TipoTime.SECONDS,
 			time: 0,
 		}
 	]

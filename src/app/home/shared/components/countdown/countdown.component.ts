@@ -69,7 +69,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
 			.pipe(
 				map(() => {
 
-					if(!this.timeObject.length) {
+					if (!this.timeObject.length) {
 						this.subscription.unsubscribe();
 						return;
 					}
@@ -77,19 +77,13 @@ export class CountdownComponent implements OnInit, OnDestroy {
 					const timeDifference = this.timeLeft - Date.now();
 					const totalSeconds = Math.max(0, Math.floor(timeDifference / 1000));
 
-					this.timeObject.forEach((t) => {
-						if(t.name == TipoTime.HOURS) {
-							this.hour = Math.floor(totalSeconds / 3600);
-						} else if (t.name == TipoTime.MINUTES) {
-							this.minute = Math.floor((totalSeconds % 3600) / 60);
-						} else if (t.name == TipoTime.SECONDS) {
-							this.second = totalSeconds % 60;
-						}
-					})
+					this.hour = Math.floor(totalSeconds / 3600);
+					this.minute = Math.floor((totalSeconds % 3600) / 60);
+					this.second = totalSeconds % 60;
 
 					this.updateTime(TipoTime.HOURS, this.hour);
 					this.updateTime(TipoTime.MINUTES, this.minute);
-					this.updateTime(TipoTime.SECONDS, this.minute);
+					this.updateTime(TipoTime.SECONDS, this.second);
 				})
 			)
 			.subscribe(); // Não precisa mais armazenar o timeLeft
@@ -119,7 +113,8 @@ export class CountdownComponent implements OnInit, OnDestroy {
 
 		segmentElements?.segmentOverlay?.classList?.add('flip');
 
-		this.updateSegmentValues(segmentElements?.segmentDisplayTop, segmentElements?.segmentOverlayBottom, timeValue);
+		this.updateSegmentValues(segmentElements?.segmentDisplayTop,
+			segmentElements?.segmentOverlayBottom, timeValue);
 
 		const finishAnimation = () => {
 			segmentElements?.segmentOverlay?.classList?.remove('flip');
@@ -144,7 +139,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
 
 
 	getTimeSegmentElements(segmentElement: any) {
-		if(!segmentElement) {
+		if (!segmentElement) {
 			return null;
 		}
 
