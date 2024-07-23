@@ -1,21 +1,9 @@
-import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	OnDestroy,
-	OnInit,
-	QueryList,
-	viewChild,
-	viewChildren,
-	ViewChildren,
-} from '@angular/core';
-import { BehaviorSubject, interval, map, Subscription } from 'rxjs';
-import { Time } from '../../interfaces/time';
-import { TimeService } from '../../services/time.service';
-import { TimerObject } from '../../interfaces/timer-object';
-import { TipoTime } from '../../enums/tipo-time.enum';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit,} from '@angular/core';
+import {interval, map, Subscription} from 'rxjs';
+import {Time} from '../../interfaces/time';
+import {TimeService} from '../../services/time.service';
+import {TimerObject} from '../../interfaces/timer-object';
+import {TipoTime} from '../../enums/tipo-time.enum';
 
 @Component({
 	selector: 'app-countdown',
