@@ -19,6 +19,10 @@ export class HomePage implements OnInit {
 	faGear = faGear;
 	message = 'This modal example uses the modalController to present and dismiss modals.';
 
+	HOUR = TipoTime.HOURS;
+	MINUTES = TipoTime.MINUTES;
+	SECONDS = TipoTime.SECONDS;
+
 	timeObject: TimerObject[] = [
 		{
 			name: TipoTime.SECONDS,
@@ -36,7 +40,7 @@ export class HomePage implements OnInit {
 	ngOnInit(): void {
 		this.targetDate = new Date();
 		this.targetDate.setHours(21, 51, 59, 999);
-		this,this.timeService.setTime({ duration: 5 });
+		this, this.timeService.setTime({ duration: 5 });
 	}
 
 	async openModal() {
@@ -48,6 +52,29 @@ export class HomePage implements OnInit {
 		const { data, role } = await modal.onWillDismiss();
 
 		if (role === 'confirm') {
+			const time = data as Time;
+			let newTimeObject: TimerObject[] = [];
+			if (time.hours != null && time.hours > 0) {
+				newTimeObject.push({
+					name: this.HOUR,
+				});
+			}
+			if (time.minutes != null && time.minutes > 0) {
+				newTimeObject.push({
+					name: this.MINUTES,
+				});
+			}
+
+			if (time.seconds != null && time.seconds > 0) {
+				newTimeObject.push({
+					name: this.SECONDS,
+				});
+			}
+
+			if (!!newTimeObject.length) {
+				this.timeObject = newTimeObject;
+			}
+
 			this.timeService.setTime(data as Time);
 		}
 		this.cdRef.detectChanges();

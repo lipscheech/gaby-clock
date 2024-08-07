@@ -1,5 +1,6 @@
+import { TipoTimer } from './../../enums/tipo-time.enum';
 import { Component, OnInit } from '@angular/core';
-import { IonDatetime, ModalController } from '@ionic/angular';
+import { IonDatetime, ModalController, RangeCustomEvent } from '@ionic/angular';
 import { Time } from '../../interfaces/time';
 
 @Component({
@@ -10,8 +11,16 @@ import { Time } from '../../interfaces/time';
 export class ModalConfigComponent {
 
 	name: string = '';
-	time: Time = { };
+	time: Time = {};
 	minutes: number = 0;
+	typeTimer: string = TipoTimer.HOUR_MINUTES_SECONDS;
+	maxTypeTimer: number = 0;
+	TipoTimer = TipoTimer;
+	HOUR_MINUTES_SECOND = TipoTimer.HOUR_MINUTES_SECONDS;
+	HOUR_MINUTES = TipoTimer.HOUR_MINUTES;
+	MINUTES_SECONDS = TipoTimer.MINUTES_SECONDS;
+	MINUTES = TipoTimer.MINUTES;
+	SECONDS = TipoTimer.SECONDS;
 
 	constructor(private modalCtrl: ModalController) { }
 
@@ -20,17 +29,38 @@ export class ModalConfigComponent {
 	}
 
 	confirm() {
+		const hour = this.time?.hours != null ? this.time?.hours * 3600 : 0;
+		const minutes = this.time?.minutes != null ? this.time?.minutes * 60 : 0;
+		const seconds = this.time?.seconds ?? 0;
+		this.time.duration =  hour + minutes + seconds;
+
 		return this.modalCtrl.dismiss(this.time, 'confirm');
 	}
 
+	onIonChangeHour(ev: Event) {
+		this.time.hours = ((ev as RangeCustomEvent).detail.value as number) ?? 0;
+	}
 
-	confirmTime(event: Event) {
-		const selectedTimeString = (event.target as unknown as IonDatetime).value as string; // Obtém o valor como string
+	onIonChangeMinutes(ev: Event) {
+		this.time.minutes = ((ev as RangeCustomEvent).detail.value as number) ?? 0;
+	}
 
-    // Extrai os minutos da string (considerando o formato "HH:mm")
-    const selectedMinutes = parseInt(selectedTimeString.split(':')[1], 10);
+	onIonChangeSeconds(ev: Event) {
+		this.time.seconds = ((ev as RangeCustomEvent).detail.value as number) ?? 0;
+	}
 
-    this.time.duration = selectedMinutes ?? 0;
-  }
+	hasHours() {
+		return this.typeTimer === this.HOUR_MINUTES_SECOND || this.typeTimer === this.HOUR_MINUTES;
+	}
+
+	hasMinutes() {
+		return this.typeTimer === this.HOUR_MINUTES_SECOND || this.typeTimer === this.MINUTES_SECONDS
+			|| this.typeTimer === this.HOUR_MINUTES || this.typeTimer === this.MINUTES;
+	}
+
+	hasSeconds() {
+		return this.typeTimer === this.HOUR_MINUTES_SECOND || this.typeTimer === this.MINUTES_SECONDS
+			|| this.typeTimer === this.SECONDS;
+	}
 
 }

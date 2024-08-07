@@ -1,31 +1,92 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-button color="medium" (click)="cancel()">
 				<ion-icon slot="icon-only" ios="close" md="close"></ion-icon>
 			</ion-button>
-    </ion-buttons>
-    <ion-title class="text-center">Timer config</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="confirm()" [strong]="true">
-				<ion-icon slot="icon-only" ios="checkmark" md="checkmark"></ion-icon>
+		</ion-buttons>
+		<ion-title class="text-center">Timer config</ion-title>
+		<ion-buttons slot="end">
+			<ion-button (click)="confirm()" [strong]="true">
+				<ion-icon
+					slot="icon-only"
+					ios="checkmark"
+					md="checkmark"
+				></ion-icon>
 			</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+		</ion-buttons>
+	</ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-list>
+	<ion-list>
 		<ion-item>
-			<ion-select label="Timer type" interface="action-sheet" label-placement="Timer type">
-				<ion-select-option value="hms">Horas, minutos e segundos</ion-select-option>
-				<ion-select-option value="hm">Horas e minutos</ion-select-option>
-				<ion-select-option value="ms">Minutos e segundos</ion-select-option>
-				<ion-select-option value="m">Apenas minutos</ion-select-option>
+			<ion-select
+				label="Timer type"
+				[(ngModel)]="typeTimer"
+				interface="action-sheet"
+				label-placement="Timer type"
+			>
+				<ion-select-option [value]="TipoTimer.HOUR_MINUTES_SECONDS"
+					>Horas, minutos e segundos</ion-select-option
+				>
+				<ion-select-option [value]="TipoTimer.HOUR_MINUTES"
+					>Horas e minutos</ion-select-option
+				>
+				<ion-select-option [value]="TipoTimer.MINUTES_SECONDS"
+					>Minutos e segundos</ion-select-option
+				>
+				<ion-select-option [value]="TipoTimer.MINUTES"
+					>Apenas minutos</ion-select-option
+				>
+				<ion-select-option [value]="TipoTimer.SECONDS"
+					>Apenas segundos</ion-select-option
+				>
 			</ion-select>
 		</ion-item>
 	</ion-list>
-	<div class="d-flex col-12 justify-content-center align-items-center mt-2">
-		<ion-datetime presentation="time" [hourValues]="0" (ionChange)="confirmTime($event)">
-		</ion-datetime>
+	<div class="d-flex flex-column col-12 justify-content-center align-items-center mt-5">
+		<label *ngIf="hasHours()" class="text-center text-light">Hour</label>
+		<div class="d-flex col-12">
+			<ng-container *ngIf="hasHours()">
+				<ion-range
+					[min]="0"
+					[max]="12"
+					[pin]="true"
+					[ticks]="true"
+					aria-label="Range with ionChange"
+					(ionChange)="onIonChangeHour($event)">
+				<ion-text color="light">Hour</ion-text>
+			</ion-range>
+			</ng-container>
+		</div>
+		<label *ngIf="hasMinutes()" class="text-center text-light">Minutes</label>
+		<div class="d-flex col-12">
+			<ng-container *ngIf="hasMinutes()">
+				<ion-range
+					[min]="0"
+					[max]="60"
+					[pin]="true"
+					[ticks]="true"
+					aria-label="Range with ionChange"
+					(ionChange)="onIonChangeMinutes($event)">
+					<ion-text color="light">Minutes</ion-text>
+				</ion-range>
+			</ng-container>
+		</div>
+		<label *ngIf="hasSeconds()" class="text-center text-light">Seconds</label>
+		<div class="d-flex col-12">
+			<ng-container *ngIf="hasSeconds()">
+				<ion-range
+					[min]="0"
+					[max]="60"
+					[pin]="true"
+					[ticks]="true"
+					aria-label="Range with ionChange"
+					(ionChange)="onIonChangeSeconds($event)">
+				<ion-text color="light">Seconds</ion-text>
+			</ion-range>
+			</ng-container>
+		</div>
+
 	</div>
 </ion-content>
