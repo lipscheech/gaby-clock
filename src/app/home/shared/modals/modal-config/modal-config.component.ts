@@ -29,9 +29,9 @@ export class ModalConfigComponent {
 	}
 
 	confirm() {
-		const hour = this.time?.hours != null ? this.time?.hours * 3600 : 0;
-		const minutes = this.time?.minutes != null ? this.time?.minutes * 60 : 0;
-		const seconds = this.time?.seconds ?? 0;
+		const hour = (this.time?.hours || 0) * 3600;
+		const minutes = (this.time?.minutes || 0) * 60;
+		const seconds = this.time?.seconds || 0;
 		this.time.duration =  hour + minutes + seconds;
 
 		return this.modalCtrl.dismiss(this.time, 'confirm');

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { ModalController } from '@ionic/angular';
 import { ModalConfigComponent } from './shared/modals/modal-config/modal-config.component';
@@ -6,6 +6,7 @@ import { Time } from './shared/interfaces/time';
 import { TimeService } from './shared/services/time.service';
 import { TimerObject } from './shared/interfaces/timer-object';
 import { TipoTime } from './shared/enums/tipo-time.enum';
+import { CountdownComponent } from './shared/components/countdown/countdown.component';
 
 @Component({
 	selector: 'app-home',
@@ -14,10 +15,11 @@ import { TipoTime } from './shared/enums/tipo-time.enum';
 })
 export class HomePage implements OnInit {
 
+	@ViewChild('countdown') countdown!: CountdownComponent;
+
 	targetDate: Date = new Date();
 	time: Time = { duration: 50 };
 	faGear = faGear;
-	message = 'This modal example uses the modalController to present and dismiss modals.';
 
 	HOUR = TipoTime.HOURS;
 	MINUTES = TipoTime.MINUTES;
@@ -38,8 +40,6 @@ export class HomePage implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.targetDate = new Date();
-		this.targetDate.setHours(21, 51, 59, 999);
 		this, this.timeService.setTime({ duration: 5 });
 	}
 
@@ -78,5 +78,9 @@ export class HomePage implements OnInit {
 			this.timeService.setTime(data as Time);
 		}
 		this.cdRef.detectChanges();
+	}
+
+	startCountdown() {
+		this.countdown?.playCountdown();
 	}
 }

@@ -1,9 +1,9 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit,} from '@angular/core';
-import {interval, map, Subscription} from 'rxjs';
-import {Time} from '../../interfaces/time';
-import {TimeService} from '../../services/time.service';
-import {TimerObject} from '../../interfaces/timer-object';
-import {TipoTime} from '../../enums/tipo-time.enum';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, } from '@angular/core';
+import { interval, map, Subscription } from 'rxjs';
+import { Time } from '../../interfaces/time';
+import { TimeService } from '../../services/time.service';
+import { TimerObject } from '../../interfaces/timer-object';
+import { TipoTime } from '../../enums/tipo-time.enum';
 
 @Component({
 	selector: 'app-countdown',
@@ -131,25 +131,12 @@ export class CountdownComponent implements OnInit, OnDestroy {
 			return null;
 		}
 
-		const segmentDisplay = segmentElement.querySelector(
-			'.segment-display'
-		);
-		const segmentDisplayTop = segmentDisplay.querySelector(
-			'.segment-display__top'
-		);
-		const segmentDisplayBottom = segmentDisplay.querySelector(
-			'.segment-display__bottom'
-		);
-
-		const segmentOverlay = segmentDisplay.querySelector(
-			'.segment-overlay'
-		);
-		const segmentOverlayTop = segmentOverlay.querySelector(
-			'.segment-overlay__top'
-		);
-		const segmentOverlayBottom = segmentOverlay.querySelector(
-			'.segment-overlay__bottom'
-		);
+		const segmentDisplay = segmentElement.querySelector('.segment-display');
+		const segmentDisplayTop = segmentDisplay.querySelector('.segment-display__top');
+		const segmentDisplayBottom = segmentDisplay.querySelector('.segment-display__bottom');
+		const segmentOverlay = segmentDisplay.querySelector('.segment-overlay');
+		const segmentOverlayTop = segmentOverlay.querySelector('.segment-overlay__top');
+		const segmentOverlayBottom = segmentOverlay.querySelector('.segment-overlay__bottom');
 
 		return {
 			segmentDisplayTop,
@@ -162,15 +149,41 @@ export class CountdownComponent implements OnInit, OnDestroy {
 
 	setTime() {
 		this.timeService.getTime().subscribe((time: Time) => {
-			if (time?.duration)
-				this.timeLeft = new Date().getTime() + time.duration * 60 * 1000;
-			this.detectChanges();
+			setTimeout(() => {
+				if (time?.duration) {
+					this.time = time;
+					this.detectChanges();
+				}
+			}, 1000);
 		});
 	}
 
 	updateSegmentValues(displayElement: any, overlayElement: any, value: any) {
 		displayElement.textContent = value;
 		overlayElement.textContent = value;
+	}
+
+	getSizeElements() {
+		const timeSegment = document.querySelectorAll('.time-segment') || [];
+		const segmentOverlay = document.querySelectorAll('.segment-overlay') || [];
+		if (!!this.timeObject.length && this.timeObject.length >= 3 && !!timeSegment.length
+			&& !!segmentOverlay.length) {
+
+			timeSegment.forEach((segment: any) => {
+				segment.style.width = `${segment.clientWidth / 1.2}px`;
+				segment.style.fontSize = `${segment.clientWidth / 1.2}px`;
+			});
+
+			segmentOverlay.forEach((overlay: any) => {
+				overlay.style.width = `${overlay.clientWidth / 1.2}px`;
+			});
+		}
+	}
+
+	playCountdown() {
+		this.getSizeElements();
+		this.timeLeft = new Date().getTime() + (this.time?.duration || 0) * 1000;
+		this.detectChanges();
 	}
 
 	ngOnDestroy() {
